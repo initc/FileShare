@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.jie.file.MainInterfaceBean;
 import com.jie.fileshare.R;
 import com.jie.fragment.ContactFragment;
+import com.jie.view.ContactSearchEditText;
 
 @SuppressLint("NewApi")
 public class MainInterface extends FragmentActivity {
@@ -26,8 +27,8 @@ public class MainInterface extends FragmentActivity {
 	private MainInterfaceBean mainUser = new MainInterfaceBean();
 
 	private FragmentManager fManager;
+	//´ËÎªfragment
 	private View currentView;
-
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -46,6 +47,7 @@ public class MainInterface extends FragmentActivity {
 		mainUser.setRlConversation((RelativeLayout) findViewById(R.id.rl_conversation));
 		mainUser.setRlContact((RelativeLayout) findViewById(R.id.rl_contact));
 		mainUser.setRlMe((RelativeLayout) findViewById(R.id.rl_me));
+		
 	}
 
 	/**
@@ -61,7 +63,7 @@ public class MainInterface extends FragmentActivity {
 		mainUser.getContact().setOnClickListener(contact);
 		mainUser.getRlMe().setOnClickListener(me);
 		mainUser.getMe().setOnClickListener(me);
-
+		
 	}
 
 	/**
@@ -97,6 +99,7 @@ public class MainInterface extends FragmentActivity {
 			if (contact == null) {
 				contact = new ContactFragment();
 			}
+			
 			FragmentTransaction tran = fManager.beginTransaction();
 			tran.replace(R.id.main_frame, contact, "contact");
 			tran.commit();

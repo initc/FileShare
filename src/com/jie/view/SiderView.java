@@ -6,8 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -25,18 +23,26 @@ public class SiderView extends View {
 	float height;
 	float sizeHeight;
 	float sizeBug;
-
+    private OnSiderClickListener  onSiderClickListener;
+	
 	public SiderView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public SiderView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
 	public void setTextLoad(TextView tl) {
 		this.textLoad = tl;
+	}
+	public OnSiderClickListener getOnSiderClickListener() {
+		return onSiderClickListener;
+	}
+
+	public void setOnSiderClickListener(OnSiderClickListener onSiderClickListener) {
+		this.onSiderClickListener = onSiderClickListener;
 	}
 
 	@Override
@@ -99,11 +105,18 @@ public class SiderView extends View {
 				textLoad.setText(z[index]);
 				textLoad.setVisibility(View.VISIBLE);
 			}
+			//设置监听事件    来通知listview安排位置
+			if(onSiderClickListener!=null)
+				onSiderClickListener.onSelect(z[index]);
 			break;
 		}
-
+	
 		// 事件已经处理完成不能向下传播了 下面是listview
 		return true;
 	}
 
+	public interface OnSiderClickListener {
+		public void  onSelect(String  ch);
+	}
+	
 }

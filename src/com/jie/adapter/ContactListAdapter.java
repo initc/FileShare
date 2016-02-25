@@ -1,8 +1,8 @@
 package com.jie.adapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.zip.Inflater;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,8 +20,10 @@ import com.jie.charater.utils.PinyinComparator;
 import com.jie.fileshare.R;
 
 public class ContactListAdapter extends BaseAdapter {
-
+	// 此引用来给adptaer来经行操作的
 	private List<User> user;
+	// 此引用是来持久化数据的
+	private List<User> final_user;
 	private Context context;
 	private static int ZM_TYPE = 0;
 	private static int USER_TYPE = 1;
@@ -33,12 +35,60 @@ public class ContactListAdapter extends BaseAdapter {
 
 		user = list;
 		changeView(user);
+		final_user = user;
 		this.context = context;
 	}
 
+	public void updateNoNew() {
+		user = final_user;
+		notifyDataSetChanged();
+	}
+
+	// 用一个字符创来过滤数据
+	public void fileterString(CharSequence s) {
+		user = new ArrayList<User>();
+		User u=null;
+		User zm=null;
+		int  index=-1;
+		for (int i = 0; i < final_user.size(); i++) {
+			u = final_user.get(i);
+			if (!u.isUser()) {
+				zm=u;
+				index=i;
+			} else {
+				if (u.getName().indexOf(s.toString()) != -1
+						|| u.getPinyin().startsWith(s.toString())) {
+					if(index!=-1){
+						user.add(zm);
+						index=-1;
+					}
+					user.add(u);
+					
+				}
+
+			}
+
+		}
+		notifyDataSetChanged();
+		
+	}
+	public int getPosition(String ch){
+		User u;
+		for(int i=0;i<user.size();i++){
+			u=user.get(i);
+			if(!u.isUser()&&u.getFirstLetter().equals(ch)){
+				return i;
+			}
+		}
+		return user.size()-1;
+	}
+	
+	
+   //使用新的数据来跟新数据
 	public void updateAdaper(List<User> _list) {
 		user = _list;
 		changeView(_list);
+		final_user = user;
 		notifyDataSetChanged();
 	}
 
@@ -60,7 +110,7 @@ public class ContactListAdapter extends BaseAdapter {
 			String pinyin = characterParser.getSelling(user.getName())
 					.toUpperCase();
 			user.setPinyin(pinyin);
-			pinyin=pinyin.substring(0,1);
+			pinyin = pinyin.substring(0, 1);
 			Log.d("**************", pinyin);
 			if (pinyin.matches("[A-Z]")) {
 				user.setFirstLetter(pinyin);
