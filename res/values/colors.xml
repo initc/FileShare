@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#499BF7</color>
+    <color name="white">#FFFFFF</color>
+     <color name="devide_line">#CBCED2</color>
+     <color name="black">#CC000000</color>
+     <color name="textload">#808080</color>
+     <color name="sider">#BFBFBF</color>
+     <color name="sidertext">#808080</color>
+     <color name="none">#00000000</color>
+</resources>

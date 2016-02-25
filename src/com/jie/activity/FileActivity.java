@@ -1,4 +1,4 @@
-package com.jie.view;
+package com.jie.activity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,8 +21,16 @@ import android.widget.Toast;
 import com.jie.file.FileManager;
 import com.jie.file.FileNode;
 import com.jie.fileshare.R;
-
-public class MainActivity extends Activity {
+	/**
+	 * 这是管理文件传输的activity    
+	 * 你可以选择一个文件来进行与服务器的传输
+	 * 
+	 * @since 2016/2/22
+	 * @version 1.0
+	 * @author lenovo
+	 * 
+	 */
+public class FileActivity extends Activity {
 	private SimpleAdapter adapter;
 	private List<Map<String, String>> data;
 	private ListView listview;
@@ -86,7 +94,7 @@ public class MainActivity extends Activity {
 				// 说明这个文件时文件夹或者是一个不可读的文件
 			    //传输文件	
 				fileManager.uploadFile(path);
-			    Toast.makeText(MainActivity.this, "upload  file  "+map.get("filename"), 0).show();
+			    Toast.makeText(FileActivity.this, "upload  file  "+map.get("filename"), 0).show();
 				return;
 			}
 			data.clear();

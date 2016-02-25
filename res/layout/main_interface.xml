@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/top_user_rl"
+        
+        >
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            />
+        
+        <ImageButton 
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/title_add"
+            android:background="@drawable/title_add"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            />
+        
+    </RelativeLayout>
+    <View 
+        android:id="@+id/line_top"
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:background="@color/devide_line"
+    android:layout_below="@id/top_user_rl"
+    />
+    <LinearLayout
+        android:id="@+id/buttom_user_ll"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+       
+        android:orientation="horizontal" >
+
+        <RelativeLayout style="@style/ButtomBar" 
+            android:id="@+id/rl_conversation"
+            >
+
+            <ImageButton
+                android:id="@+id/user_conversation"
+                style="@style/ButtomBarImgBtn"
+                android:background="@drawable/imb_user_conversation" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/ButtomBar"
+            android:id="@+id/rl_contact"
+             >
+
+            <ImageButton
+                android:id="@+id/user_contact"
+                style="@style/ButtomBarImgBtn"
+                android:background="@drawable/imb_user_contact" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/ButtomBar"
+            android:id="@+id/rl_me"
+             >
+
+            <ImageButton
+                android:id="@+id/user_me"
+                style="@style/ButtomBarImgBtn"
+                android:background="@drawable/imb_user_me" />
+        </RelativeLayout>
+    </LinearLayout>
+<View 
+    android:layout_width="match_parent"
+    android:layout_height="0.5dp"
+    android:background="@color/devide_line"
+    android:layout_above="@id/buttom_user_ll"
+    />
+
+    <FrameLayout
+        android:id="@+id/main_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/line_top"
+        android:layout_above="@id/buttom_user_ll" >
+    </FrameLayout>
+
+</RelativeLayout>

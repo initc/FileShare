@@ -8,26 +8,111 @@
 package com.jie.fileshare;
 
 public final class R {
+    public static final class anim {
+        public static final int login_anim=0x7f040000;
+    }
     public static final class attr {
     }
+    public static final class color {
+        public static final int black=0x7f050003;
+        public static final int blue=0x7f050000;
+        public static final int devide_line=0x7f050002;
+        public static final int none=0x7f050007;
+        public static final int sider=0x7f050005;
+        public static final int sidertext=0x7f050006;
+        public static final int textload=0x7f050004;
+        public static final int white=0x7f050001;
+    }
     public static final class drawable {
-        public static final int back=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
+        public static final int acm_inputbox=0x7f020000;
+        public static final int add_contact=0x7f020001;
+        public static final int back=0x7f020002;
+        public static final int bt_login_bg=0x7f020003;
+        public static final int cancel_edittext=0x7f020004;
+        public static final int default_user=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int imb_user_contact=0x7f020007;
+        public static final int imb_user_conversation=0x7f020008;
+        public static final int imb_user_me=0x7f020009;
+        public static final int iv_login_bg=0x7f02000a;
+        public static final int login=0x7f02000b;
+        public static final int normal_title_add=0x7f02000c;
+        public static final int normal_user_contact=0x7f02000d;
+        public static final int normal_user_conversation=0x7f02000e;
+        public static final int normal_user_me=0x7f02000f;
+        public static final int pressed_title_add=0x7f020010;
+        public static final int search=0x7f020011;
+        public static final int search_edittext=0x7f020012;
+        public static final int selected_user_contact=0x7f020013;
+        public static final int selected_user_conversation=0x7f020014;
+        public static final int selected_user_me=0x7f020015;
+        public static final int siderbackground=0x7f020016;
+        public static final int textload=0x7f020017;
+        public static final int title_add=0x7f020018;
+        public static final int welcome=0x7f020019;
     }
     public static final class id {
-        public static final int back_file=0x7f060001;
-        public static final int content=0x7f060004;
-        public static final int fileTitle=0x7f060002;
-        public static final int filename=0x7f060000;
-        public static final int list=0x7f060003;
+        public static final int account=0x7f080003;
+        public static final int back_file=0x7f080013;
+        public static final int bt_login=0x7f080005;
+        public static final int buttom_user_ll=0x7f080019;
+        public static final int contact_fragme=0x7f08000a;
+        public static final int contact_listview=0x7f08000b;
+        public static final int contact_load=0x7f08000d;
+        public static final int contact_search=0x7f080009;
+        public static final int contact_sider=0x7f08000c;
+        public static final int content=0x7f080021;
+        public static final int conversation_date=0x7f080011;
+        public static final int conversation_headInfo=0x7f08000e;
+        public static final int conversation_user_info=0x7f080010;
+        public static final int conversation_user_name=0x7f08000f;
+        public static final int fileTitle=0x7f080014;
+        public static final int filename=0x7f080012;
+        public static final int iv_login_picture=0x7f080000;
+        public static final int iv_welcome=0x7f080024;
+        public static final int line_top=0x7f080018;
+        public static final int list=0x7f080015;
+        public static final int ll_user_info=0x7f080002;
+        public static final int main_frame=0x7f080020;
+        public static final int password=0x7f080004;
+        public static final int register=0x7f080006;
+        public static final int rl_contact=0x7f08001c;
+        public static final int rl_conversation=0x7f08001a;
+        public static final int rl_me=0x7f08001e;
+        public static final int rl_user=0x7f080001;
+        public static final int title_add=0x7f080017;
+        public static final int top_user_rl=0x7f080016;
+        public static final int tv_forget_password=0x7f080007;
+        public static final int tv_url_view=0x7f080008;
+        public static final int user_contact=0x7f08001d;
+        public static final int user_conversation=0x7f08001b;
+        public static final int user_headInfo=0x7f080022;
+        public static final int user_me=0x7f08001f;
+        public static final int user_name=0x7f080023;
+        public static final int zm=0x7f080025;
     }
     public static final class layout {
-        public static final int fileadapter=0x7f030000;
-        public static final int filemanagerview=0x7f030001;
-        public static final int mainactivity=0x7f030002;
+        public static final int activity_login=0x7f030000;
+        public static final int common_url_textview=0x7f030001;
+        public static final int contact_fragment=0x7f030002;
+        public static final int conversation_item=0x7f030003;
+        public static final int fileadapter=0x7f030004;
+        public static final int filemanagerview=0x7f030005;
+        public static final int main_interface=0x7f030006;
+        public static final int mainactivity=0x7f030007;
+        public static final int user_item=0x7f030008;
+        public static final int welcomelayout=0x7f030009;
+        public static final int zm_space=0x7f03000a;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
+        public static final int app_name=0x7f060000;
+        public static final int bt_login=0x7f060003;
+        public static final int et_account_hint=0x7f060001;
+        public static final int et_password_hint=0x7f060002;
+        public static final int forget_password=0x7f060005;
+        public static final int register=0x7f060004;
+        public static final int search=0x7f060007;
+        public static final int title_text=0x7f060006;
     }
     public static final class style {
         /** 
@@ -51,10 +136,12 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f050000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f050001;
+        public static final int AppTheme=0x7f070001;
+        public static final int ButtomBar=0x7f070002;
+        public static final int ButtomBarImgBtn=0x7f070003;
     }
 }

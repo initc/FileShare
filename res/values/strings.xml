@@ -1,5 +1,11 @@
 <resources>
 
     <string name="app_name">FileShare</string>
-
+    <string name="et_account_hint">分享号</string>
+    <string name="et_password_hint">密码</string>
+    <string name="bt_login">登录</string>
+    <string name="register">新用户</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="title_text">分享</string>
+    <string name="search">搜索</string>
 </resources>
