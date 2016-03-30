@@ -68,14 +68,22 @@ public final class R {
         public static final int conversation_user_name=0x7f080010;
         public static final int fileTitle=0x7f080015;
         public static final int filename=0x7f080013;
+        public static final int image_back=0x7f080025;
         public static final int iv_login_picture=0x7f080000;
-        public static final int iv_welcome=0x7f080025;
+        public static final int iv_welcome=0x7f08002d;
         public static final int line_top=0x7f080019;
         public static final int list=0x7f080016;
         public static final int ll_user_info=0x7f080002;
         public static final int main_frame=0x7f080021;
         public static final int password=0x7f080004;
         public static final int register=0x7f080006;
+        public static final int register_back=0x7f080024;
+        public static final int register_line=0x7f080026;
+        public static final int register_name=0x7f080027;
+        public static final int register_password=0x7f080028;
+        public static final int register_sure=0x7f08002a;
+        public static final int register_sure_password=0x7f080029;
+        public static final int register_title=0x7f080023;
         public static final int rl_contact=0x7f08001d;
         public static final int rl_conversation=0x7f08001b;
         public static final int rl_me=0x7f08001f;
@@ -87,10 +95,10 @@ public final class R {
         public static final int tv_url_view=0x7f080008;
         public static final int user_contact=0x7f08001e;
         public static final int user_conversation=0x7f08001c;
-        public static final int user_headInfo=0x7f080023;
+        public static final int user_headInfo=0x7f08002b;
         public static final int user_me=0x7f080020;
-        public static final int user_name=0x7f080024;
-        public static final int zm=0x7f080026;
+        public static final int user_name=0x7f08002c;
+        public static final int zm=0x7f08002e;
     }
     public static final class layout {
         public static final int activity_login=0x7f030000;
@@ -101,18 +109,23 @@ public final class R {
         public static final int filemanagerview=0x7f030005;
         public static final int main_interface=0x7f030006;
         public static final int mainactivity=0x7f030007;
-        public static final int user_item=0x7f030008;
-        public static final int welcomelayout=0x7f030009;
-        public static final int zm_space=0x7f03000a;
+        public static final int register=0x7f030008;
+        public static final int user_item=0x7f030009;
+        public static final int welcomelayout=0x7f03000a;
+        public static final int zm_space=0x7f03000b;
     }
     public static final class string {
         public static final int app_name=0x7f060000;
+        public static final int back=0x7f060008;
         public static final int bt_login=0x7f060003;
         public static final int et_account_hint=0x7f060001;
         public static final int et_password_hint=0x7f060002;
         public static final int forget_password=0x7f060005;
         public static final int register=0x7f060004;
+        public static final int register_name=0x7f060009;
         public static final int search=0x7f060007;
+        public static final int sure=0x7f06000b;
+        public static final int sure_password=0x7f06000a;
         public static final int title_text=0x7f060006;
     }
     public static final class style {

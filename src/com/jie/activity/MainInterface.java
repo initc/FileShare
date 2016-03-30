@@ -63,7 +63,7 @@ public class MainInterface extends FragmentActivity {
 		mainUser.getContact().setOnClickListener(contact);
 		mainUser.getRlMe().setOnClickListener(me);
 		mainUser.getMe().setOnClickListener(me);
-		
+		mainUser.getContact().performClick();
 	}
 
 	/**

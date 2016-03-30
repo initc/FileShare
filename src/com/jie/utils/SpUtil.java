@@ -23,6 +23,12 @@ public class SpUtil {
 		return context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
 	}
 
+	/**
+	 * 查看是否已经登录了
+	 * 
+	 * @param sp
+	 * @return
+	 */
 	public static boolean isHaveLogIn(SharedPreferences sp) {
 		return sp.getBoolean("isHaveLogIn", false);
 	}
@@ -41,7 +47,21 @@ public class SpUtil {
 		editor.commit();
 
 	}
-
+	public static void removeStringSharePerference(SharedPreferences sp,
+			String key){
+		Editor editor=sp.edit();
+		editor.remove(key);
+		editor.commit();
+	
+	}
+	public static void clearLogin(SharedPreferences sp){
+		Editor editor=sp.edit();
+		editor.remove("username");
+		editor.remove("password");
+		editor.commit();
+		
+	}
+	
 	public static void setBooleanSharedPerference(SharedPreferences sp,
 			String key, boolean value) {
 		Editor editor = sp.edit();

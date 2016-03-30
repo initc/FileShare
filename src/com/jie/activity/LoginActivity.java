@@ -1,16 +1,22 @@
 package com.jie.activity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.jie.fileshare.R;
+import com.jie.net.UserLogin;
 import com.jie.view.TextURLView;
 
 public class LoginActivity extends Activity {
@@ -18,6 +24,30 @@ public class LoginActivity extends Activity {
 	private Button bt_login;
 	private Button bt_register;
 	private TextURLView urlText;
+
+	private EditText username;
+	private EditText password;
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			// 登录 number
+			if (msg.what == 0x26) {
+				// 目前就不需要再进行判断了
+				if (msg.obj == null) {
+					Toast.makeText(LoginActivity.this, "登录失败",
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
+				Intent intent = new Intent(LoginActivity.this,
+						MainInterface.class);
+				startActivity(intent);
+			}
+			if (msg.what == 0x46) {
+				Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT)
+						.show();
+				return;
+			}
+		};
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +63,9 @@ public class LoginActivity extends Activity {
 		bt_login = (Button) this.findViewById(R.id.bt_login);
 		bt_register = (Button) this.findViewById(R.id.register);
 		urlText = (TextURLView) this.findViewById(R.id.tv_forget_password);
+
+		username = (EditText) findViewById(R.id.account);
+		password = (EditText) findViewById(R.id.password);
 	}
 
 	private void setAnim(View view) {
@@ -42,22 +75,48 @@ public class LoginActivity extends Activity {
 
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if (resultCode == 0x46) {
+
+			return;
+		}
+		if (resultCode == 0x26) {
+
+			return;
+		}
+	}
+
 	private void init() {
 		setAnim(rl_user);
 		initTvUrl();
 		bt_login.setOnClickListener(loginOnClickListener);
 		bt_register.setOnClickListener(registerOnClickListener);
 	}
-	private void initTvUrl(){
+
+	private void initTvUrl() {
 		urlText.setText(R.string.forget_password);
 	}
+
 	private OnClickListener loginOnClickListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
+			String name = username.getText().toString().trim();
+			String pass = password.getText().toString();
+			if (name.equals("") || pass.equals("")) {
+				Toast.makeText(LoginActivity.this, "用户名或者密码不可为空",
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			Map<String, String> xml = new HashMap<String, String>();
+			xml.put("head", "login");
+			xml.put("username", name);
+			xml.put("password", pass);
+			UserLogin login = new UserLogin(getApplicationContext(), handler);
+			login.login(xml);
 
-			Intent intent = new Intent(LoginActivity.this,MainInterface.class);
-			startActivity(intent);
 		}
 	};
 
@@ -65,8 +124,9 @@ public class LoginActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(LoginActivity.this, "register", 1).show();
-
+			Intent intent = new Intent(LoginActivity.this,
+					RegisterActivity.class);
+			startActivityForResult(intent, 0x10);
 		}
 	};
 

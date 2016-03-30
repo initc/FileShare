@@ -8,4 +8,8 @@
     <string name="forget_password">忘记密码</string>
     <string name="title_text">分享</string>
     <string name="search">搜索</string>
+    <string name="back" >返回</string>
+    <string name="register_name">用户名</string>
+    <string name="sure_password">确认密码</string>
+    <string name="sure">确定</string>
 </resources>
