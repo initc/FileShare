@@ -37,6 +37,17 @@ public class LoginActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
+				// 对返回的数据进行判断
+				// 主要是对节点result的判断 如果是true就意味的登录成功 否则失败
+				@SuppressWarnings("unchecked")
+				Map<String, String> data = (Map<String, String>) msg.obj;
+				String result = data.get("result");
+				if (result == null || result.equals("")
+						|| result.equals("false")) {
+					Toast.makeText(getApplicationContext(), "登录失败",
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
 				Intent intent = new Intent(LoginActivity.this,
 						MainInterface.class);
 				startActivity(intent);

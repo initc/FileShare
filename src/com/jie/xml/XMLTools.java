@@ -91,7 +91,7 @@ public class XMLTools {
 			}
 			xml.endTag("", head);
 			xml.endDocument();
-			return writer.toString();
+			return new String(writer.toString().getBytes(),"utf-8");
 
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

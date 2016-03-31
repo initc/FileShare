@@ -1,5 +1,6 @@
 package com.jie.net;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import com.jie.net.UserRegister.TheadRegister;
@@ -22,8 +23,8 @@ public class UserLogin {
 		this.handler = handler;
 	}
 	/**
-	 * ����ɹ����� 0x26
-	 * ���û�гɹ����handler����0x46 ����ʧ����Ϣ
+	 * 锟斤拷锟斤拷晒锟斤拷锟斤拷锟� 0x26
+	 * 锟斤拷锟矫伙拷谐晒锟斤拷锟斤拷handler锟斤拷锟斤拷0x46 锟斤拷锟斤拷失锟斤拷锟斤拷息
 	 * @param data
 	 */
 	public void login(Map<String, String> data) {
@@ -32,7 +33,7 @@ public class UserLogin {
 		thread.start();
 
 	}
-
+	
 	class TheadLogin implements Runnable {
 		private Map<String, String> data;
 		private Handler handler;
@@ -43,17 +44,18 @@ public class UserLogin {
 		}
 
 		/**
-		 * �û�ע��
+		 * 锟矫伙拷注锟斤拷
 		 * 
 		 * @param data
-		 *            ���ݵļ�ֵ��
-		 * @return �ɹ�Ϊtrue ʧ��Ϊfalse
+		 *            锟斤拷锟捷的硷拷值锟斤拷
+		 * @return 锟缴癸拷为true 失锟斤拷为false
 		 */
 		private String loginThread(Map<String, String> data) {
 			String xml = XMLTools.SimpleMakeXML(data);
+			System.out.println(xml);
 			if (xml == null)
 				return null;
-			// ������ӳɹ��򷵻�һ��xml����
+			// 锟斤拷锟斤拷锟接成癸拷锟津返伙拷一锟斤拷xml锟斤拷锟斤拷
 			String result = SendXMLToWeb.sendXMLToWeb(Register_Path, xml);
 			if (result == null)
 				return null;
@@ -68,7 +70,7 @@ public class UserLogin {
 
 				Message message = new Message();
 				Map<String, String> xmlMap = XMLTools.parseXML(re, "login");
-				// �п���null
+				// 锟叫匡拷锟斤拷null
 				if(xmlMap==null){
 					message.what = 0x46;
 				}else{
