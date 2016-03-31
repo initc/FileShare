@@ -3,6 +3,8 @@ package com.jie.net;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -55,6 +57,7 @@ public class UserRegister {
 			if (result == null)
 				return null;
 			Log.d("xml---------", result);
+		
 			return result;
 		}
 

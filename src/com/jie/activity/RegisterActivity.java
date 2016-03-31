@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -39,8 +41,20 @@ public class RegisterActivity extends Activity {
 				}
 				Toast.makeText(RegisterActivity.this, "注册成功",
 						Toast.LENGTH_SHORT).show();
-				setResult(0x26, null);
-				finish();
+				// 注册成功了 diglog显示分享号
+				Builder dialog = new AlertDialog.Builder(
+						RegisterActivity.this);
+				dialog.setMessage("分享号为"+re.get("loginId"));
+				dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						setResult(0x26, null);
+						finish();
+					}
+				});
+				dialog.create().show();
 
 			}
 			// 注册失败时
@@ -81,7 +95,7 @@ public class RegisterActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				//客户端中的发送错误是在1-5  服务端中是6-10
+				// 客户端中的发送错误是在1-5 服务端中是6-10
 				setResult(0x41, null);
 				finish();
 			}

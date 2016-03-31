@@ -77,7 +77,7 @@ public class XMLTools {
 		StringWriter writer = new StringWriter();
 		try {
 			xml.setOutput(writer);
-			xml.startDocument("utf-8", true);
+			xml.startDocument("GBK", true);
 			// 最外的root节点
 			xml.startTag("", head);
 

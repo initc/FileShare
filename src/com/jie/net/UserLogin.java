@@ -1,16 +1,13 @@
 package com.jie.net;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-import com.jie.net.UserRegister.TheadRegister;
-import com.jie.xml.XMLTools;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+
+import com.jie.xml.XMLTools;
 
 public class UserLogin {
 	public static String Register_Path = "http://192.168.191.1/FileShare/user/login";
