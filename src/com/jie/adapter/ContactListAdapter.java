@@ -195,6 +195,7 @@ public class ContactListAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
+		
 		return user.get(position);
 	}
 

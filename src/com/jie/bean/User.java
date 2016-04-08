@@ -10,14 +10,13 @@ public class User {
 	private String firstLetter;
 	// 名字
 	private String name;
-	// 自己本来的名字
-	private String id;
+	
 	// 简介信息
 	private String info;
 	// 性别
 	private String sex;
 	// 登录号
-	private String loginNumber;
+	private String loginId;
 	// 头像
 	private Drawable headInfo;
 	// 指定是否为字母
@@ -55,13 +54,7 @@ public class User {
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 
 	public String getInfo() {
 		return info;
@@ -79,12 +72,12 @@ public class User {
 		this.sex = sex;
 	}
 
-	public String getLoginNumber() {
-		return loginNumber;
+	public String getLoginId() {
+		return loginId;
 	}
 
-	public void setLoginNumber(String loginNumber) {
-		this.loginNumber = loginNumber;
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 
 	public Drawable getHeadInfo() {

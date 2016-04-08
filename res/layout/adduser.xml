@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+
+    
+    <EditText 
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/adduser"
+         android:background="#FFFFFF"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"   
+        android:layout_marginTop="50dp"    
+        android:hint="@string/add_user" 
+        />
+    <Button   
+        android:id="@+id/adduserBT"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:layout_below="@id/adduser"
+        android:layout_height="50dp"
+        android:text="@string/sure"
+        android:background="@drawable/bt_login_bg"
+        
+        />
+    
+</RelativeLayout>

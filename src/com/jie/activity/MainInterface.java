@@ -1,6 +1,7 @@
 package com.jie.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -9,26 +10,34 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.jie.bean.User;
 import com.jie.file.MainInterfaceBean;
 import com.jie.fileshare.R;
 import com.jie.fragment.ContactFragment;
-import com.jie.view.ContactSearchEditText;
+import com.jie.fragment.ConversationFragment;
 
 @SuppressLint("NewApi")
 public class MainInterface extends FragmentActivity {
 	// 三个fragment界面
 	private Fragment conversation;
-	private Fragment contact;
+	private ContactFragment contact;
 	private Fragment me;
+	
+	
+	
+	//用来添加用户的按钮
+	private ImageView add;
 	// 下面都是此界面的的控件
 	// 我使用一个bean来进行存储
 	private MainInterfaceBean mainUser = new MainInterfaceBean();
 
 	private FragmentManager fManager;
-	//此为fragment
+	// 此为fragment
 	private View currentView;
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -47,7 +56,7 @@ public class MainInterface extends FragmentActivity {
 		mainUser.setRlConversation((RelativeLayout) findViewById(R.id.rl_conversation));
 		mainUser.setRlContact((RelativeLayout) findViewById(R.id.rl_contact));
 		mainUser.setRlMe((RelativeLayout) findViewById(R.id.rl_me));
-		
+		add = (ImageView) findViewById(R.id.title_add);
 	}
 
 	/**
@@ -64,6 +73,31 @@ public class MainInterface extends FragmentActivity {
 		mainUser.getRlMe().setOnClickListener(me);
 		mainUser.getMe().setOnClickListener(me);
 		mainUser.getContact().performClick();
+
+		add.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+				Intent intent = new Intent(MainInterface.this, AddUser.class);
+				startActivityForResult(intent, 0x88);
+
+			}
+		});
+
+	}
+
+	// 获取得到的user数据
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == 0x88 && resultCode == 0x89) {
+			//跟新数据
+			contact.update();
+
+		}
+
 	}
 
 	/**
@@ -76,6 +110,17 @@ public class MainInterface extends FragmentActivity {
 
 		@Override
 		public void onClick(View v) {
+			if (conversation == null) {
+				conversation = new ConversationFragment();
+			}
+			
+			//使添加不可用
+			add.setEnabled(false);
+			
+			
+			FragmentTransaction tran = fManager.beginTransaction();
+			tran.replace(R.id.main_frame, conversation, "conversation");
+			tran.commit();
 
 			// 卧槽 之前犯了一些小错误 才把这个逻辑写的这么复杂。。。
 			View c = v;
@@ -99,6 +144,9 @@ public class MainInterface extends FragmentActivity {
 			if (contact == null) {
 				contact = new ContactFragment();
 			}
+			//使添加不可用
+			add.setEnabled(true);
+			
 			
 			FragmentTransaction tran = fManager.beginTransaction();
 			tran.replace(R.id.main_frame, contact, "contact");
@@ -123,6 +171,9 @@ public class MainInterface extends FragmentActivity {
 		@Override
 		public void onClick(View v) {
 
+			
+			//使添加不可用
+			add.setEnabled(false);
 			// 卧槽 之前犯了一些小错误 才把这个逻辑写的这么复杂。。。
 			View c = v;
 			if (v.getId() == R.id.rl_me)

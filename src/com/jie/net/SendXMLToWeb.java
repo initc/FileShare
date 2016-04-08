@@ -1,6 +1,7 @@
 package com.jie.net;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,19 +47,22 @@ public class SendXMLToWeb {
 
 				return null;
 			}
-			StringBuilder strResult = new StringBuilder();
+			
+			ByteArrayOutputStream byteout= new ByteArrayOutputStream();
 			InputStream in = con.getInputStream();
 			byte[] temp = new byte[1024];
 			int len = 0;
 			while ((len = in.read(temp)) != -1) {
 
-				String t = new String(temp, 0, len);
-				strResult.append(t);
+				byteout.write(temp, 0, len);
 			}
-			return strResult.toString();
+			String xmlout=byteout.toString("GB2312");
+			System.out.println(xmlout);
+			return xmlout;
+			 
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {

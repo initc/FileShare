@@ -12,4 +12,6 @@
     <string name="register_name">用户名</string>
     <string name="sure_password">确认密码</string>
     <string name="sure">确定</string>
+    <string name="no_conversation">暂时没有聊天记录</string>
+    <string name="add_user">输入分享号</string>
 </resources>

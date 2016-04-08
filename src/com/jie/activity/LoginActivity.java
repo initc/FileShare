@@ -5,6 +5,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.jie.fileshare.R;
 import com.jie.net.UserLogin;
+import com.jie.utils.SpUtil;
 import com.jie.view.TextURLView;
 
 public class LoginActivity extends Activity {
@@ -48,6 +50,9 @@ public class LoginActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 					return;
 				}
+				SharedPreferences sh=SpUtil.getSharePerference(LoginActivity.this);
+				SpUtil.setStringSharedPerference(sh, "loginId", username.getText().toString());
+				
 				Intent intent = new Intent(LoginActivity.this,
 						MainInterface.class);
 				startActivity(intent);

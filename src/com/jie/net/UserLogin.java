@@ -11,6 +11,7 @@ import com.jie.xml.XMLTools;
 
 public class UserLogin {
 	public static String Register_Path = "http://192.168.191.1/FileShare/user/login";
+	//public static String Register_Path = "http://127.0.0.1/FileShare/user/login";
 	private Handler handler;
 	private Context context;
 

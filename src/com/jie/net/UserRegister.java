@@ -24,13 +24,15 @@ public class UserRegister {
 	}
 
 	public static String Register_Path = "http://192.168.191.1/FileShare/user/register";
-	
-	public void register(Map<String, String> data){
-		Thread thread= new Thread(new TheadRegister(data,handler));
+	//public static String Register_Path = "http://127.0.0.1/FileShare/user/register";
+
+	public void register(Map<String, String> data) {
+		Thread thread = new Thread(new TheadRegister(data, handler));
 		thread.setName("register");
 		thread.start();
-		
+
 	}
+
 	class TheadRegister implements Runnable {
 		private Map<String, String> data;
 		private Handler handler;
@@ -39,7 +41,7 @@ public class UserRegister {
 			this.data = data;
 			this.handler = handler;
 		}
-		
+
 		/**
 		 * 用户注册
 		 * 
@@ -49,7 +51,7 @@ public class UserRegister {
 		 */
 		private String registerThread(Map<String, String> data) {
 			String xml = XMLTools.SimpleMakeXML(data);
-			//System.out.println(xml);
+			// System.out.println(xml);
 			if (xml == null)
 				return null;
 			// 如果添加成功则返回一个xml数据
@@ -57,22 +59,22 @@ public class UserRegister {
 			if (result == null)
 				return null;
 			Log.d("xml---------", result);
-		
+			
 			return result;
 		}
 
 		@Override
 		public void run() {
-			String re=registerThread(data);
-			if(re!=null){
-				Intent xmlResult=new Intent();
-				Message message=new Message();
-				Map<String,String> xmlMap=XMLTools.parseXML(re,"register");
-				//有可能null
-				message.obj=xmlMap;
-				message.what=0x20;
+			String re = registerThread(data);
+			if (re != null) {
+				Intent xmlResult = new Intent();
+				Message message = new Message();
+				Map<String, String> xmlMap = XMLTools.parseXML(re, "register");
+				// 有可能null
+				message.obj = xmlMap;
+				message.what = 0x20;
 				handler.sendMessage(message);
-			}else{
+			} else {
 				handler.sendEmptyMessage(0x44);
 			}
 		}
