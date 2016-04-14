@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.jie.activity.ChatActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+        </activity>
+        <activity
             android:name="com.jie.activity.LoginActivity"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Light.NoTitleBar" >

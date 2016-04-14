@@ -52,7 +52,10 @@ public class ConversationList extends ListView {
 		listAdapter.notifyDataSetChanged();
 
 	}
-
+	public Conversation getItem(int position){
+		
+		return conversation.get(position);
+	}
 	// 返回list中的size 用来控制dialog的显示
 	public int getSize() {
 		return conversation.size();

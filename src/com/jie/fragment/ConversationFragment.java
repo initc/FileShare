@@ -3,15 +3,19 @@ package com.jie.fragment;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import com.jie.activity.ChatActivity;
 import com.jie.adapter.ConversationList;
+import com.jie.bean.Conversation;
 import com.jie.fileshare.R;
 
 public class ConversationFragment extends Fragment {
@@ -19,7 +23,7 @@ public class ConversationFragment extends Fragment {
 	Timer timer = new Timer();
 	ConversationList list;
 	TextView dialog;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -42,8 +46,26 @@ public class ConversationFragment extends Fragment {
 
 			}
 		}, 0, 1000);
-
+		ItemClick itemClick= new ItemClick();
+		list.setOnItemClickListener(itemClick);
 		return conversion;
 	}
 
+	class ItemClick implements OnItemClickListener{
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			
+			Intent intent= new Intent(getContext(),ChatActivity.class);
+			Conversation data=list.getItem(position);
+			intent.putExtra("FriendId", data.getFriendLoginId());
+			startActivity(intent);
+			
+		}
+		
+		
+		
+	}
+	
 }
