@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Xml;
 
+import com.jie.bean.Conversation;
 import com.jie.bean.User;
 
 public class XMLTools {
@@ -48,7 +50,7 @@ public class XMLTools {
 		}
 
 	}
-
+	
 	public static List<User> getContact(String xml) {
 		List<User> users = new LinkedList<User>();
 		XmlPullParser parse = Xml.newPullParser();
@@ -101,7 +103,74 @@ public class XMLTools {
 		}
 		return users;
 	}
+	/**
+	 * 
+	 * 
+	 * @param xml
+	 * @return
+	 */
+	public static List<Conversation> getMessage(String xml) {
+		List<Conversation> users = new LinkedList<Conversation>();
+		XmlPullParser parse = Xml.newPullParser();
 
+		ByteArrayInputStream in = null;
+		try {
+			//----------更改了   utf-8  到gbk
+			in = new ByteArrayInputStream(xml.getBytes());
+			parse.setInput(in, "utf-8");
+			int type = parse.getEventType();
+			Conversation user = null;
+			while (type != XmlPullParser.END_DOCUMENT) {
+				switch (type) {
+				case XmlPullParser.START_TAG:
+					if (parse.getName().equals("message")) {
+
+						user = new Conversation();
+
+					} else if (parse.getName().equals("fromId")) {
+
+						user.setFriendLoginId(parse.nextText());
+					} else if (parse.getName().equals("fromName")) {
+
+						user.setName(parse.nextText());
+					}else if (parse.getName().equals("toId")) {
+
+						user.setHostloginId(parse.nextText());
+					}else if (parse.getName().equals("content")) {
+
+						user.setMessage(parse.nextText());
+					}
+
+					break;
+
+				case XmlPullParser.END_TAG:
+					if (parse.getName().equals("message")) {
+						user.setTime(new Date().toString());
+						user.setMySend(false);
+						user.setStringData(true);
+						users.add(user);
+						
+					}
+					break;
+				default:
+					break;
+
+				}
+				type = parse.next();
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return users;
+	}
 	public static Map<String, String> parseXML(String xml, String root) {
 		Map<String, String> re = new HashMap<String, String>();
 		XmlPullParser parse = Xml.newPullParser();

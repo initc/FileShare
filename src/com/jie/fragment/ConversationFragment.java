@@ -60,6 +60,7 @@ public class ConversationFragment extends Fragment {
 			Intent intent= new Intent(getContext(),ChatActivity.class);
 			Conversation data=list.getItem(position);
 			intent.putExtra("FriendId", data.getFriendLoginId());
+			intent.putExtra("FriendName", data.getName());
 			startActivity(intent);
 			
 		}

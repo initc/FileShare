@@ -36,15 +36,19 @@
             android:layout_width="match_parent"
             android:layout_height="0.3dp" />
 
-        <ImageButton
+        <ImageView
+            
             android:id="@+id/send"
+            android:src="@drawable/addfile"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:scaleType="fitXY"
             android:layout_alignParentRight="true"
             android:layout_marginRight="2dp"
             android:layout_marginTop="10dp" />
 
         <EditText
+            android:id="@+id/edittext"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="5dp"
@@ -52,7 +56,7 @@
             android:layout_marginTop="10dp"
             android:layout_toLeftOf="@id/send"
             android:background="@drawable/acm_inputbox"
-            android:text="555" />
+             />
     </RelativeLayout>
 
     <ListView

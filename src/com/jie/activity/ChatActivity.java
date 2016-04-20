@@ -1,33 +1,128 @@
 package com.jie.activity;
 
+import java.util.Date;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jie.DBUtils.DBHelper;
+import com.jie.DBUtils.DBUser;
 import com.jie.bean.ChatHolder;
 import com.jie.bean.Conversation;
 import com.jie.fileshare.R;
+import com.jie.net.SendMessageToFriend;
+import com.jie.net.SendXMLToWeb;
 import com.jie.utils.SpUtil;
+import com.jie.xml.XMLTools;
 
 public class ChatActivity extends Activity {
+	private Timer timer;
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+
+			if (msg.what == 0x21) {
+
+				Toast.makeText(ChatActivity.this, "联网后再试", 0).show();
+			} else if (msg.what == 0x26) {
+				// 说明发送成功了
+				// 需要把发送的信息存储到数据库中和显示出来
+				ContentValues values = new ContentValues();
+				values.put(Conversation.COLUMN_NAME_HOSTLOGINID, hostId);
+				values.put(Conversation.COLUMN_NAME_FRIENDLOGINID, friendId);
+				values.put(Conversation.COLUMN_NAME_FRIENDNAME, friendName);
+				values.put(Conversation.COLUMN_NAME_MESSAGE, message);
+				Date time = new Date();
+				values.put(Conversation.COLUMN_NAME_TIME, time.toString());
+				values.put(Conversation.COLUMN_NAME_TYPE, 0);
+				DBUser.insertMessageToConversation(ChatActivity.this, values);
+				Conversation con = new Conversation();
+
+				con.setFriendLoginId(friendId);
+				con.setHostloginId(hostId);
+				con.setName(friendName);
+				con.setMessage(message);
+				con.setTime(time.toString());
+				con.setMySend(true);
+				con.setStringData(true);
+
+				chatData.add(con);
+				chatAdapter.notifyDataSetChanged();
+				chatListview.setSelection(chatListview.getCount());
+			} else if (msg.what == 0x23) {
+				@SuppressWarnings("unchecked")
+				List<Conversation> messages = (List<Conversation>) msg.obj;
+
+				for (int i = 0; i < messages.size(); i++) {
+					Conversation conv = messages.get(i);
+					ContentValues values = new ContentValues();
+					values.put(Conversation.COLUMN_NAME_HOSTLOGINID,
+							conv.getHostloginId());
+					values.put(Conversation.COLUMN_NAME_FRIENDLOGINID,
+							conv.getFriendLoginId());
+					values.put(Conversation.COLUMN_NAME_FRIENDNAME,
+							conv.getName());
+					values.put(Conversation.COLUMN_NAME_MESSAGE,
+							conv.getMessage());
+
+					values.put(Conversation.COLUMN_NAME_TIME, conv.getTime());
+					values.put(Conversation.COLUMN_NAME_TYPE, 1);
+					DBUser.insertMessageToConversation(ChatActivity.this,
+							values);
+
+				}
+				chatData.addAll(messages);
+				chatAdapter.notifyDataSetChanged();
+				chatListview.setSelection(chatListview.getCount());
+			}
+
+		};
+
+	};
 
 	private ListView chatListview;
 	// 用来记录所有的消息
 	List<Conversation> chatData;
 	ChatAdapter chatAdapter;
+	// 输入框
+	EditText sendText;
+	// 发送按钮
+	ImageView send;
+	// 记录send按钮是否是在发送文件还是普通的消息
+	private boolean isFile;
+
+	private String friendId;
+	private String friendName;
+	private String hostId;
+
+	private String message;
+
+	// private int type;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +130,52 @@ public class ChatActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat);
 		chatListview = (ListView) findViewById(R.id.chatListview);
+		sendText = (EditText) findViewById(R.id.edittext);
+		send = (ImageView) findViewById(R.id.send);
 		chatData = new LinkedList<Conversation>();
 		chatAdapter = new ChatAdapter();
 		chatListview.setAdapter(chatAdapter);
-		Intent intent= getIntent();
-		initMessageData(intent.getStringExtra("FriendId"));
+		Intent intent = getIntent();
+
+		// 获取一些信息
+		SharedPreferences sh = SpUtil.getSharePerference(ChatActivity.this);
+		hostId = sh.getString("loginId", "");
+		friendId = intent.getStringExtra("FriendId");
+		friendName = intent.getStringExtra("FriendName");
+		initMessageData(friendId);
+		sendText.addTextChangedListener(new SendEdit());
+		send.setOnClickListener(new OnClickListener() {
+
+			@SuppressLint("NewApi")
+			@Override
+			public void onClick(View v) {
+
+				String text = sendText.getText().toString();
+				if (text == null || text.equals(""))
+					return;
+				if (!isFile) {
+					if (hostId == null) {
+
+						SharedPreferences sh = SpUtil
+								.getSharePerference(ChatActivity.this);
+
+						hostId = sh.getString("loginId", "");
+					}
+					// 记录消息
+					message = text;
+
+					SendMessageToFriend sendTools = new SendMessageToFriend(
+							handler, ChatActivity.this);
+					sendTools.sendToFriend(hostId, friendId, text);
+					sendText.setText("");
+				}
+
+			}
+		});
+
+		timer = new Timer();
+		timer.schedule(new ConnectionTask(handler, hostId, friendId), 0, 5000);
+
 	}
 
 	@SuppressLint("NewApi")
@@ -55,11 +191,13 @@ public class ChatActivity extends Activity {
 				Conversation.COLUMN_NAME_MESSAGE, Conversation.COLUMN_NAME_TYPE };
 		SharedPreferences sh = SpUtil.getSharePerference(this);
 		String loginId = sh.getString("loginId", "");
-		String[] selectArgs = new String[] { loginId ,friendId};
+		String[] selectArgs = new String[] { loginId, friendId };
 		String orderBy = Conversation.COLUMN_NAME_TIME;
 		Cursor cursor = sqlTable.query(true, Conversation.TABLE_NAME, columns,
 				Conversation.COLUMN_NAME_HOSTLOGINID + " =? and "
-						+ Conversation.COLUMN_NAME_MESSAGE + " is not null and "+Conversation.COLUMN_NAME_FRIENDLOGINID+"=?",
+						+ Conversation.COLUMN_NAME_MESSAGE
+						+ " is not null and "
+						+ Conversation.COLUMN_NAME_FRIENDLOGINID + "=?",
 				selectArgs, null, null, orderBy, null, null);
 
 		while (cursor.moveToNext()) {
@@ -92,6 +230,7 @@ public class ChatActivity extends Activity {
 
 		}
 		chatAdapter.notifyDataSetChanged();
+		chatListview.setSelection(chatListview.getCount());
 		cursor.close();
 
 	}
@@ -135,8 +274,22 @@ public class ChatActivity extends Activity {
 		}
 
 		@Override
+		public int getItemViewType(int position) {
+			// TODO Auto-generated method stub
+			Conversation item = chatData.get(position);
+			if (item.isMySend() && item.isStringData()) {
+				return 0;
+			} else {
+				return 1;
+			}
+
+		}
+
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Conversation item = chatData.get(position);
+
+			System.out.println("----isMySend------" + item.isMySend());
 			if (convertView == null) {
 				if (item.isMySend() && item.isStringData()) {
 					convertView = View.inflate(ChatActivity.this,
@@ -161,8 +314,119 @@ public class ChatActivity extends Activity {
 				holder.text.setText(item.getMessage());
 
 			}
-			
+
 			return convertView;
+		}
+
+	}
+
+	public void back(View v) {
+
+		if (timer != null) {
+			timer.cancel();
+		}
+		finish();
+
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (timer != null) {
+				timer.cancel();
+			}
+
+		}
+
+		return super.onKeyDown(keyCode, event);
+
+	}
+
+	class SendEdit implements TextWatcher {
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			// TODO Auto-generated method stub
+			int size = s.length();
+			if (size > 0) {
+				send.setImageResource(R.drawable.send);
+				isFile = false;
+			} else {
+				send.setImageResource(R.drawable.addfile);
+				isFile = true;
+
+			}
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	class ConnectionTask extends TimerTask {
+
+		private Handler handler;
+		private String hostId;
+		private String friendId;
+
+		public ConnectionTask(Handler handler, String hostId, String friendId) {
+			this.handler = handler;
+			this.hostId = hostId;
+			this.friendId = friendId;
+		}
+
+		private String Get_Path = "http://192.168.191.1/FileShare/user/getMessage";
+		private boolean isDia = false;
+
+		@Override
+		public void run() {
+
+			Map<String, String> data = new Hashtable<String, String>();
+			data.put("head", "GetMessage");
+			data.put("hostId", hostId);
+			data.put("friendId", friendId);
+			String xml = XMLTools.SimpleMakeXML(data);
+
+			String result = SendXMLToWeb.sendXMLToWeb(Get_Path, xml);
+
+			if (result == null && isDia) {
+
+				isDia = false;
+				handler.sendEmptyMessage(0x21);
+				return;
+			}
+			if (result != null) {
+				isDia = false;
+				// 获取到了内容
+				if (result.length() < 15) {
+					// 表示现在是没有有用的数据的
+					return;
+				}
+
+				List<Conversation> re = XMLTools.getMessage(result);
+
+				// 发送获得到的消息
+				System.out
+						.println("this is in the  chatActivity-----" + result);
+				Message mes = new Message();
+				mes.what = 0x23;
+				mes.obj = re;
+				handler.sendMessage(mes);
+
+			}
 		}
 
 	}

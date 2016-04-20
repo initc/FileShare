@@ -9,6 +9,8 @@
     android:id="@+id/message_right"
     android:background="@drawable/right"
     android:layout_alignParentRight="true"
+    android:gravity="center"
+    android:layout_marginRight="5dp"
     />
     
     
