@@ -174,7 +174,7 @@ public class ChatActivity extends Activity {
 		});
 
 		timer = new Timer();
-		timer.schedule(new ConnectionTask(handler, hostId, friendId), 0, 5000);
+		timer.schedule(new ConnectionTask(handler, hostId, friendId), 0, 2500);
 
 	}
 
