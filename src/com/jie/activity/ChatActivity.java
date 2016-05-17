@@ -114,7 +114,7 @@ public class ChatActivity extends Activity {
 	// 发送按钮
 	ImageView send;
 	// 记录send按钮是否是在发送文件还是普通的消息
-	private boolean isFile;
+	private boolean isFile=true;
 
 	private String friendId;
 	private String friendName;
@@ -151,9 +151,11 @@ public class ChatActivity extends Activity {
 			public void onClick(View v) {
 
 				String text = sendText.getText().toString();
-				if (text == null || text.equals(""))
-					return;
+				
 				if (!isFile) {
+					if (text == null || text.equals(""))
+						return;
+					
 					if (hostId == null) {
 
 						SharedPreferences sh = SpUtil
@@ -168,6 +170,11 @@ public class ChatActivity extends Activity {
 							handler, ChatActivity.this);
 					sendTools.sendToFriend(hostId, friendId, text);
 					sendText.setText("");
+				}else{
+					
+					Intent intent= new Intent(ChatActivity.this,FileActivity.class);
+					startActivity(intent);
+					
 				}
 
 			}

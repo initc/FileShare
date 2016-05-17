@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -25,10 +26,8 @@ public class MainInterface extends FragmentActivity {
 	private Fragment conversation;
 	private ContactFragment contact;
 	private Fragment me;
-	
-	
-	
-	//用来添加用户的按钮
+
+	// 用来添加用户的按钮
 	private ImageView add;
 	// 下面都是此界面的的控件
 	// 我使用一个bean来进行存储
@@ -93,7 +92,7 @@ public class MainInterface extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == 0x88 && resultCode == 0x89) {
-			//跟新数据
+			// 跟新数据
 			contact.update();
 
 		}
@@ -106,6 +105,8 @@ public class MainInterface extends FragmentActivity {
 	 * @author lenovo
 	 *
 	 */
+	Fragment mfragment;
+
 	private class ConversationClick implements OnClickListener {
 
 		@Override
@@ -113,14 +114,24 @@ public class MainInterface extends FragmentActivity {
 			if (conversation == null) {
 				conversation = new ConversationFragment();
 			}
-			
-			//使添加不可用
+
+			// 使添加不可用
 			add.setEnabled(false);
-			
-			
 			FragmentTransaction tran = fManager.beginTransaction();
-			tran.replace(R.id.main_frame, conversation, "conversation");
-			tran.commit();
+			if(conversation.isAdded()){
+				tran.hide(mfragment);
+				tran.show(conversation)
+						.commit();
+				((ConversationFragment)conversation).updateDB();
+			}else{
+				tran.hide(mfragment);
+				tran.add(R.id.main_frame, conversation, "conversation").show(conversation)
+				.commit();
+				
+			}
+			
+
+			mfragment = conversation;
 
 			// 卧槽 之前犯了一些小错误 才把这个逻辑写的这么复杂。。。
 			View c = v;
@@ -137,20 +148,37 @@ public class MainInterface extends FragmentActivity {
 	 * @author lenovo
 	 *
 	 */
+	int count = 0;
+
 	private class ContactClick implements OnClickListener {
 
 		@Override
 		public void onClick(View v) {
 			if (contact == null) {
 				contact = new ContactFragment();
+				Log.v("is get clcik ", "数据好像重新获取了 " + count++);
 			}
-			//使添加不可用
+
+			if (mfragment == null) {
+				mfragment = contact;
+			}
+			// 使添加不可用
 			add.setEnabled(true);
-			
-			
 			FragmentTransaction tran = fManager.beginTransaction();
-			tran.replace(R.id.main_frame, contact, "contact");
-			tran.commit();
+			if (contact.isAdded()) {
+
+				tran.hide(mfragment);
+
+				tran.show(contact).commit();
+
+			} else {
+				if (mfragment != contact)
+					tran.hide(mfragment);
+				tran.add(R.id.main_frame, contact, "contact").show(contact)
+						.commit();
+
+			}
+			mfragment = contact;
 			// 卧槽 之前犯了一些小错误 才把这个逻辑写的这么复杂。。。
 			View c = v;
 			if (v.getId() == R.id.rl_contact)
@@ -171,8 +199,7 @@ public class MainInterface extends FragmentActivity {
 		@Override
 		public void onClick(View v) {
 
-			
-			//使添加不可用
+			// 使添加不可用
 			add.setEnabled(false);
 			// 卧槽 之前犯了一些小错误 才把这个逻辑写的这么复杂。。。
 			View c = v;

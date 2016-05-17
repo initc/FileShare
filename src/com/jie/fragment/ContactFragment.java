@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jie.DBUtils.DBUser;
+import com.jie.activity.ChatActivity;
 import com.jie.adapter.ContactListAdapter;
 import com.jie.bean.Conversation;
 import com.jie.bean.User;
@@ -53,7 +56,7 @@ public class ContactFragment extends Fragment implements TextWatcher,
 	private List<User> resource;
 	private ContactListAdapter listAdapter;
 	ContactSearchEditText searchEdit;
-
+	int count=0;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class ContactFragment extends Fragment implements TextWatcher,
 		findView();
 		initView();// 初始化数据 获取到数据
 		// 初始化适配器 把数据填装到适配器中
+		Log.v("is it again?", "是 这 个 方法 被调用 了吗??"+count++);
 		doEvent();
 		return root;
 
@@ -95,7 +99,7 @@ public class ContactFragment extends Fragment implements TextWatcher,
 		contactListView.setOnItemClickListener(itemListner);
 		// 上网获取信息
 		update();
-
+		
 	}
 
 	class MyItemClickListner implements OnItemClickListener {
@@ -117,6 +121,13 @@ public class ContactFragment extends Fragment implements TextWatcher,
 			//写入数据
 			DBUser.insertUserToConversation(getActivity(), values);
 			}
+			
+			
+			Intent intent = new Intent(getContext(), ChatActivity.class);
+			intent.putExtra("FriendId", friendId);
+			intent.putExtra("FriendName",friendName);
+			startActivity(intent);
+			
 			
 			
 		}

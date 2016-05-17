@@ -23,15 +23,15 @@ public class ConversationFragment extends Fragment {
 	Timer timer = new Timer();
 	ConversationList list;
 	TextView dialog;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View conversion = inflater.inflate(R.layout.conversation, null);
 		list = (ConversationList) conversion.findViewById(R.id.conversionList);
-		//去数据库中经行初始化数据
+		// 去数据库中经行初始化数据
 		list.addDBData();
-		
+
 		dialog = (TextView) conversion.findViewById(R.id.noConversation);
 		timer.schedule(new TimerTask() {
 
@@ -46,27 +46,29 @@ public class ConversationFragment extends Fragment {
 
 			}
 		}, 0, 1000);
-		ItemClick itemClick= new ItemClick();
+		ItemClick itemClick = new ItemClick();
 		list.setOnItemClickListener(itemClick);
 		return conversion;
 	}
 
-	class ItemClick implements OnItemClickListener{
+	public void updateDB() {
+		list.addDBData();
+	}
+
+	class ItemClick implements OnItemClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			
-			Intent intent= new Intent(getContext(),ChatActivity.class);
-			Conversation data=list.getItem(position);
+
+			Intent intent = new Intent(getContext(), ChatActivity.class);
+			Conversation data = list.getItem(position);
 			intent.putExtra("FriendId", data.getFriendLoginId());
 			intent.putExtra("FriendName", data.getName());
 			startActivity(intent);
-			
+
 		}
-		
-		
-		
+
 	}
-	
+
 }
