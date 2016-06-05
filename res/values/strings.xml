@@ -8,10 +8,14 @@
     <string name="forget_password">忘记密码</string>
     <string name="title_text">分享</string>
     <string name="search">搜索</string>
-    <string name="back" >返回</string>
+    <string name="back">返回</string>
     <string name="register_name">用户名</string>
     <string name="sure_password">确认密码</string>
     <string name="sure">确定</string>
     <string name="no_conversation">暂时没有聊天记录</string>
     <string name="add_user">输入分享号</string>
+    <string name="recently_file">最近文件</string>
+	<string name="fileload">下载内容</string>
+	<string name="location">身边的好友</string>
+	<string name="me_set">设置</string>
 </resources>

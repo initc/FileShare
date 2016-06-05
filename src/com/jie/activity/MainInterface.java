@@ -1,8 +1,16 @@
 package com.jie.activity;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -13,19 +21,21 @@ import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.jie.bean.User;
+import com.jie.activity.FileService.FileBinder;
 import com.jie.file.MainInterfaceBean;
 import com.jie.fileshare.R;
 import com.jie.fragment.ContactFragment;
 import com.jie.fragment.ConversationFragment;
+import com.jie.fragment.MeFragment;
 
 @SuppressLint("NewApi")
 public class MainInterface extends FragmentActivity {
 	// 三个fragment界面
 	private Fragment conversation;
 	private ContactFragment contact;
-	private Fragment me;
+	private MeFragment me;
 
 	// 用来添加用户的按钮
 	private ImageView add;
@@ -37,6 +47,23 @@ public class MainInterface extends FragmentActivity {
 	// 此为fragment
 	private View currentView;
 
+	private ServiceConnection con;
+	private FileBinder fileBinder;
+	// 返回定时
+	private Timer timer = new Timer();
+	private Handler handler = new Handler() {
+
+		public void handleMessage(android.os.Message msg) {
+
+			if (msg.what == 0x11) {
+
+				isBack = false;
+				timer.cancel();
+			}
+
+		};
+	};
+
 	@Override
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -45,6 +72,25 @@ public class MainInterface extends FragmentActivity {
 		fManager = getSupportFragmentManager();
 		findView();
 		setEventClick();
+
+		con = new ServiceConnection() {
+
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				// TODO Auto-generated method stub
+				fileBinder = (FileBinder) service;
+
+			}
+		};
+		Intent ser = new Intent(this, FileService.class);
+		startService(ser);
+		
 	}
 
 	private void findView() {
@@ -99,6 +145,34 @@ public class MainInterface extends FragmentActivity {
 
 	}
 
+	private boolean isBack = false;
+
+	public void onBackPressed() {
+		if (isBack) {
+			isBack = false;
+			timer.cancel();
+			Intent intent = new Intent();
+			intent.setAction(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			startActivity(intent);
+		} else {
+			isBack = true;
+			timer = new Timer();
+			Toast.makeText(this, "再按一次推出", 0).show();
+
+			timer.schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					handler.sendEmptyMessage(0x11);
+				}
+			}, 5000);
+
+		}
+
+	};
+
 	/**
 	 * 最近消息的点击事件
 	 * 
@@ -118,18 +192,16 @@ public class MainInterface extends FragmentActivity {
 			// 使添加不可用
 			add.setEnabled(false);
 			FragmentTransaction tran = fManager.beginTransaction();
-			if(conversation.isAdded()){
+			if (conversation.isAdded()) {
 				tran.hide(mfragment);
-				tran.show(conversation)
-						.commit();
-				((ConversationFragment)conversation).updateDB();
-			}else{
+				tran.show(conversation).commit();
+				((ConversationFragment) conversation).updateDB();
+			} else {
 				tran.hide(mfragment);
-				tran.add(R.id.main_frame, conversation, "conversation").show(conversation)
-				.commit();
-				
+				tran.add(R.id.main_frame, conversation, "conversation")
+						.show(conversation).commit();
+
 			}
-			
 
 			mfragment = conversation;
 
@@ -201,6 +273,34 @@ public class MainInterface extends FragmentActivity {
 
 			// 使添加不可用
 			add.setEnabled(false);
+			
+			if (me == null) {
+				me = new MeFragment();
+			}
+			
+			FragmentTransaction tran = fManager.beginTransaction();
+			if (me.isAdded()) {
+
+				tran.hide(mfragment);
+
+				tran.show(me).commit();
+
+			} else {
+				tran.hide(mfragment);
+				tran.add(R.id.main_frame, me, "me").show(me)
+						.commit();
+
+			}
+			mfragment = me;
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			// 卧槽 之前犯了一些小错误 才把这个逻辑写的这么复杂。。。
 			View c = v;
 			if (v.getId() == R.id.rl_me)

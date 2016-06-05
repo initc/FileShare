@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -21,28 +23,51 @@ import android.widget.Toast;
 import com.jie.file.FileManager;
 import com.jie.file.FileNode;
 import com.jie.fileshare.R;
-	/**
-	 * 这是管理文件传输的activity    
-	 * 你可以选择一个文件来进行与服务器的传输
-	 * 
-	 * @since 2016/2/22
-	 * @version 1.0
-	 * @author lenovo
-	 * 
-	 */
+
+/**
+ * 这是管理文件传输的activity 你可以选择一个文件来进行与服务器的传输
+ * 
+ * @since 2016/2/22
+ * @version 1.0
+ * @author lenovo
+ * 
+ */
 public class FileActivity extends Activity {
 	private SimpleAdapter adapter;
 	private List<Map<String, String>> data;
 	private ListView listview;
 	private FileManager fileManager;
 	private View back_file;
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			
+			if(msg.what==0x24){
+				//fail
+				setResult(53);
+				finish();
+			}else if( msg.what==0x26){
+				//success
+				
+				
+				
+				finish();
+			}
+			
+			
+		};
 
+	};
+
+	String toid;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.filemanagerview);
+		Intent data= getIntent();
+		//获取get the id belong to  who is the man  going to upload to 
+		toid=data.getStringExtra("toid");
 		fileManager = new FileManager();
 		listview = (ListView) findViewById(R.id.list);
 		back_file = findViewById(R.id.back_file);
@@ -92,9 +117,10 @@ public class FileActivity extends Activity {
 			FileNode newNode = fileManager.InvertFiles(path);
 			if (newNode == null) {
 				// 说明这个文件时文件夹或者是一个不可读的文件
-			    //传输文件	
-				fileManager.uploadFile(path);
-			    Toast.makeText(FileActivity.this, "upload  file  "+map.get("filename"), 0).show();
+				// 传输文件
+				fileManager.uploadFile(path,handler,FileActivity.this,toid);
+				Toast.makeText(FileActivity.this,
+						"upload  file  " + map.get("filename"), 0).show();
 				return;
 			}
 			data.clear();
@@ -126,4 +152,10 @@ public class FileActivity extends Activity {
 
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		handler.sendEmptyMessage(0x24);
+	}
+	
 }

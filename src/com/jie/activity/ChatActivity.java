@@ -122,6 +122,7 @@ public class ChatActivity extends Activity {
 
 	private String message;
 
+	
 	// private int type;
 
 	@Override
@@ -142,6 +143,7 @@ public class ChatActivity extends Activity {
 		hostId = sh.getString("loginId", "");
 		friendId = intent.getStringExtra("FriendId");
 		friendName = intent.getStringExtra("FriendName");
+		((TextView)findViewById(R.id.chat_name)).setText(friendName);
 		initMessageData(friendId);
 		sendText.addTextChangedListener(new SendEdit());
 		send.setOnClickListener(new OnClickListener() {
@@ -173,7 +175,8 @@ public class ChatActivity extends Activity {
 				}else{
 					
 					Intent intent= new Intent(ChatActivity.this,FileActivity.class);
-					startActivity(intent);
+					intent.putExtra("toid", friendId);
+					startActivityForResult(intent, 52);
 					
 				}
 
@@ -184,7 +187,21 @@ public class ChatActivity extends Activity {
 		timer.schedule(new ConnectionTask(handler, hostId, friendId), 0, 2500);
 
 	}
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	// TODO Auto-generated method stub
+    	if(requestCode==52&&resultCode==53){
+    		//fale to load is to do nothing 
+    		
+    	}else if(requestCode==52&&resultCode==54){
+    		//success , Be going to show the message in listview 
+    		
+    		
+    		
+    	}
+    	
+    	
+    }
 	@SuppressLint("NewApi")
 	private void initMessageData(String friendId) {
 		chatData.clear();

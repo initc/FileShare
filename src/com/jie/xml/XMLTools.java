@@ -20,6 +20,8 @@ import android.os.Message;
 import android.util.Xml;
 
 import com.jie.bean.Conversation;
+import com.jie.bean.FileMode;
+import com.jie.bean.Location;
 import com.jie.bean.User;
 
 public class XMLTools {
@@ -50,6 +52,128 @@ public class XMLTools {
 		}
 
 	}
+	
+	
+	public static List<Location> getLocations(String xml) {
+		List<Location> users = new LinkedList<Location>();
+		XmlPullParser parse = Xml.newPullParser();
+
+		ByteArrayInputStream in = null;
+		try {
+			
+			in = new ByteArrayInputStream(xml.getBytes());
+			parse.setInput(in, "utf-8");
+			int type = parse.getEventType();
+			Location user = null;
+			while (type != XmlPullParser.END_DOCUMENT) {
+				switch (type) {
+				case XmlPullParser.START_TAG:
+					if (parse.getName().equals("user")) {
+
+						user = new Location();
+
+					} else if (parse.getName().equals("hostId")) {
+
+						user.setHostId(parse.nextText());
+					} else if (parse.getName().equals("name")) {
+
+						user.setName(parse.nextText());
+					}else if (parse.getName().equals("lon")) {
+
+						user.setLon(parse.nextText());
+					}else if (parse.getName().equals("lat")) {
+
+						user.setLat(parse.nextText());
+					}
+
+					break;
+
+				case XmlPullParser.END_TAG:
+					if (parse.getName().equals("user")) {
+						users.add(user);
+					}
+					break;
+				default:
+					break;
+
+				}
+				type = parse.next();
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return users;
+	}
+	public static List<FileMode> getFiles(String xml) {
+		List<FileMode> files = new LinkedList<FileMode>();
+		XmlPullParser parse = Xml.newPullParser();
+
+		ByteArrayInputStream in = null;
+		try {
+			//----------更改了   utf-8  到gbk
+			in = new ByteArrayInputStream(xml.getBytes());
+			parse.setInput(in, "utf-8");
+			int type = parse.getEventType();
+			FileMode file = null;
+			while (type != XmlPullParser.END_DOCUMENT) {
+				switch (type) {
+				case XmlPullParser.START_TAG:
+					if (parse.getName().equals("file")) {
+
+						file = new FileMode();
+
+					} else if (parse.getName().equals("fromId")) {
+
+						file.setFromId(parse.nextText());
+					} else if (parse.getName().equals("toId")) {
+
+						file.setToid(parse.nextText());
+					} else if (parse.getName().equals("fileName")) {
+
+						file.setFilename(parse.nextText());
+					}else if (parse.getName().equals("uuidname")) {
+
+						file.setUuidname(parse.nextText());
+					}
+
+					break;
+
+				case XmlPullParser.END_TAG:
+					if (parse.getName().equals("file")) {
+						files.add(file);
+					}
+					break;
+				default:
+					break;
+
+				}
+				type = parse.next();
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return files;
+	}
+	
+	
+	
+	
 	
 	public static List<User> getContact(String xml) {
 		List<User> users = new LinkedList<User>();

@@ -1,6 +1,7 @@
 package com.jie.DBUtils;
 
 import com.jie.bean.Conversation;
+import com.jie.bean.FileMode;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 		db.execSQL(Conversation.TABLE_SQL);
+		db.execSQL(FileMode.SQL);
 	}
 
 	@Override

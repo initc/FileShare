@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import android.content.Context;
+import android.os.Handler;
+
 import com.jie.utils.FileUtils;
 
 /**
@@ -28,13 +31,13 @@ public class FileManager {
 
 		return fileStack.size();
 	}
-    public   void uploadFile(final String path){
+    public   void uploadFile(final String path,final Handler handler ,final Context context,final String toid){
     	Thread thread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				FileUtils.uploadFile(path);
+				FileUtils.uploadFile(path,handler,context,toid);
 			}
 		});
     	thread.start();
